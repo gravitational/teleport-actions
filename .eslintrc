@@ -1,6 +1,6 @@
 {
   "extends": [
-    "standard-with-typescript", 
+    "standard-with-typescript"
     //"prettier"
   ],
   "plugins": [
