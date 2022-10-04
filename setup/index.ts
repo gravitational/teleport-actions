@@ -10,13 +10,21 @@ function versionString (rawPlatform: string, rawArch: string, requestedVersion: 
       break
     }
     default: {
-      throw new Error('platform not supported')
+      throw new Error(`platform ${rawPlatform} not supported`)
     }
   }
   let arch = ''
   switch (rawArch) {
     case 'x64': {
       arch = 'amd64'
+      break
+    }
+    case 'arm': {
+      arch = 'arm'
+      break
+    }
+    case 'arm64': {
+      arch = 'arm64'
       break
     }
     default: {
