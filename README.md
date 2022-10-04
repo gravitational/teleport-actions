@@ -15,6 +15,7 @@
 ## Table of Contents
 
 1. [Introduction](#introduction)
+1. [Actions](#actions)
 
 ## Introduction
 
@@ -23,3 +24,12 @@ workflows when trying to interact with resources protected by Teleport 🚀.
 
 This project is currently experimental and more information about
 `teleport-actions` will arrive soon.
+
+## Actions
+
+### `@gravitational/teleport-actions/setup`
+
+`@gravitational/teleport-actions/setup` installs key Teleport binaries into
+your workflow environment, for example `tctl`, `tsh` and `tbot`.
+
+The GitHub Actions cache is leveraged to increase the speed of this action.
