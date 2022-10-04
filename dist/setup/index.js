@@ -6583,27 +6583,46 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
 const tc = __importStar(__nccwpck_require__(7784));
 const os_1 = __importDefault(__nccwpck_require__(2037));
+function versionString(rawPlatform, rawArch, requestedVersion) {
+    let platform = '';
+    switch (rawPlatform) {
+        case 'linux': {
+            platform = 'linux';
+            break;
+        }
+        default: {
+            throw new Error('platform not supported');
+        }
+    }
+    let arch = '';
+    switch (rawArch) {
+        case 'x64': {
+            arch = 'amd64';
+            break;
+        }
+        default: {
+            throw new Error(`architecture ${rawArch} not supported`);
+        }
+    }
+    return `v${requestedVersion}-${platform}-${arch}`;
+}
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         core.info('This test worked...');
         const teleportToolName = 'teleport';
-        const version = '10.3.1';
-        const detectedArch = os_1.default.arch();
-        core.info(`Installing Teleport ${version} for ${detectedArch}`);
-        // TODO: Fetch the real arch.
-        // We probably only need to handle amd64 for GitHub provided runners.
-        const arch = 'amd64';
-        const toolPath = tc.find(teleportToolName, version, arch);
+        const version = versionString(os_1.default.platform(), os_1.default.arch(), '10.3.1');
+        core.info(`Installing Teleport ${version}`);
+        const toolPath = tc.find(teleportToolName, version);
         if (toolPath !== '') {
             core.info('Teleport binaries found in cache.');
             core.addPath(toolPath);
             return;
         }
         core.info('Could not find Teleport binaries in cache. Fetching...');
-        const downloadPath = yield tc.downloadTool(`https://get.gravitational.com/teleport-v${version}-linux-amd64-bin.tar.gz`);
+        const downloadPath = yield tc.downloadTool(`https://get.gravitational.com/teleport-${version}-bin.tar.gz`);
         const extractedPath = yield tc.extractTar(downloadPath);
         core.info('Writing Teleport binaries back to cache...');
-        const cachedPath = yield tc.cacheDir(extractedPath, teleportToolName, version, arch);
+        const cachedPath = yield tc.cacheDir(extractedPath, teleportToolName, version);
         core.addPath(cachedPath);
     });
 }

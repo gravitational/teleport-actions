@@ -2,18 +2,38 @@ import * as core from '@actions/core'
 import * as tc from '@actions/tool-cache'
 import os from 'os'
 
+function versionString (rawPlatform: string, rawArch: string, requestedVersion: string): string {
+  let platform = ''
+  switch (rawPlatform) {
+    case 'linux': {
+      platform = 'linux'
+      break
+    }
+    default: {
+      throw new Error('platform not supported')
+    }
+  }
+  let arch = ''
+  switch (rawArch) {
+    case 'x64': {
+      arch = 'amd64'
+      break
+    }
+    default: {
+      throw new Error(`architecture ${rawArch} not supported`)
+    }
+  }
+
+  return `v${requestedVersion}-${platform}-${arch}`
+}
+
 async function run (): Promise<void> {
   core.info('This test worked...')
   const teleportToolName = 'teleport'
-  const version = '10.3.1'
-  const detectedArch = os.arch()
-  core.info(`Installing Teleport ${version} for ${detectedArch}`)
+  const version = versionString(os.platform(), os.arch(), '10.3.1')
+  core.info(`Installing Teleport ${version}`)
 
-  // TODO: Fetch the real arch.
-  // We probably only need to handle amd64 for GitHub provided runners.
-  const arch = 'amd64'
-
-  const toolPath = tc.find(teleportToolName, version, arch)
+  const toolPath = tc.find(teleportToolName, version)
   if (toolPath !== '') {
     core.info('Teleport binaries found in cache.')
     core.addPath(toolPath)
@@ -21,10 +41,10 @@ async function run (): Promise<void> {
   }
 
   core.info('Could not find Teleport binaries in cache. Fetching...')
-  const downloadPath = await tc.downloadTool(`https://get.gravitational.com/teleport-v${version}-linux-amd64-bin.tar.gz`)
+  const downloadPath = await tc.downloadTool(`https://get.gravitational.com/teleport-${version}-bin.tar.gz`)
   const extractedPath = await tc.extractTar(downloadPath)
   core.info('Writing Teleport binaries back to cache...')
-  const cachedPath = await tc.cacheDir(extractedPath, teleportToolName, version, arch)
+  const cachedPath = await tc.cacheDir(extractedPath, teleportToolName, version)
   core.addPath(cachedPath)
 }
 run().catch((error) => {
