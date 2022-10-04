@@ -6576,14 +6576,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
 const tc = __importStar(__nccwpck_require__(7784));
+const os_1 = __importDefault(__nccwpck_require__(2037));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         core.info('This test worked...');
         const teleportToolName = 'teleport';
         const version = '10.3.1';
+        const detectedArch = os_1.default.arch();
+        core.info(`Installing Teleport ${version} for ${detectedArch}`);
         // TODO: Fetch the real arch.
         // We probably only need to handle amd64 for GitHub provided runners.
         const arch = 'amd64';

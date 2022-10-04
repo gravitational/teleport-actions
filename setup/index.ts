@@ -1,10 +1,13 @@
 import * as core from '@actions/core'
 import * as tc from '@actions/tool-cache'
+import os from 'os'
 
 async function run (): Promise<void> {
   core.info('This test worked...')
   const teleportToolName = 'teleport'
   const version = '10.3.1'
+  const detectedArch = os.arch()
+  core.info(`Installing Teleport ${version} for ${detectedArch}`)
 
   // TODO: Fetch the real arch.
   // We probably only need to handle amd64 for GitHub provided runners.
