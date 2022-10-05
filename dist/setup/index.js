@@ -6639,7 +6639,10 @@ function run() {
         core.debug('Downloading tar');
         const downloadPath = yield tc.downloadTool(`https://get.gravitational.com/teleport-${version}-bin.tar.gz`);
         core.debug('Downloading extracting tar');
-        const extractedPath = yield tc.extractTar(downloadPath);
+        const extractedPath = yield tc.extractTar(downloadPath, undefined, [
+            'xz',
+            '--strip', '1'
+        ]);
         core.info('Fetched binaries from Teleport. Writing them back to cache...');
         const cachedPath = yield tc.cacheDir(extractedPath, toolName, version);
         core.debug(`downloadPath: ${downloadPath}, extractedPath: ${extractedPath}, cachedPath: ${cachedPath}`);
