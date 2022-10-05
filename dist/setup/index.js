@@ -6614,13 +6614,22 @@ function versionString(rawPlatform, rawArch, requestedVersion) {
     }
     return `v${requestedVersion}-${platform}-${arch}`;
 }
+function getInput() {
+    const version = core.getInput('version');
+    if (version === '') {
+        throw new Error("'version' input must be non-empty");
+    }
+    return {
+        version
+    };
+}
+const toolName = 'teleport';
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
-        core.info('This test worked...');
-        const teleportToolName = 'teleport';
-        const version = versionString(os_1.default.platform(), os_1.default.arch(), '10.3.1');
+        const input = getInput();
+        const version = versionString(os_1.default.platform(), os_1.default.arch(), input.version);
         core.info(`Installing Teleport ${version}`);
-        const toolPath = tc.find(teleportToolName, version);
+        const toolPath = tc.find(toolName, version);
         if (toolPath !== '') {
             core.info('Teleport binaries found in cache.');
             core.addPath(toolPath);
@@ -6630,7 +6639,7 @@ function run() {
         const downloadPath = yield tc.downloadTool(`https://get.gravitational.com/teleport-${version}-bin.tar.gz`);
         const extractedPath = yield tc.extractTar(downloadPath);
         core.info('Writing Teleport binaries back to cache...');
-        const cachedPath = yield tc.cacheDir(extractedPath, teleportToolName, version);
+        const cachedPath = yield tc.cacheDir(extractedPath, toolName, version);
         core.addPath(cachedPath);
     });
 }

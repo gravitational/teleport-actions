@@ -35,13 +35,29 @@ function versionString (rawPlatform: string, rawArch: string, requestedVersion: 
   return `v${requestedVersion}-${platform}-${arch}`
 }
 
+interface Input {
+  version: string
+}
+
+function getInput (): Input {
+  const version = core.getInput('version')
+  if (version === '') {
+    throw new Error("'version' input must be non-empty")
+  }
+
+  return {
+    version
+  }
+}
+
+const toolName = 'teleport'
+
 async function run (): Promise<void> {
-  core.info('This test worked...')
-  const teleportToolName = 'teleport'
-  const version = versionString(os.platform(), os.arch(), '10.3.1')
+  const input = getInput()
+  const version = versionString(os.platform(), os.arch(), input.version)
   core.info(`Installing Teleport ${version}`)
 
-  const toolPath = tc.find(teleportToolName, version)
+  const toolPath = tc.find(toolName, version)
   if (toolPath !== '') {
     core.info('Teleport binaries found in cache.')
     core.addPath(toolPath)
@@ -52,7 +68,7 @@ async function run (): Promise<void> {
   const downloadPath = await tc.downloadTool(`https://get.gravitational.com/teleport-${version}-bin.tar.gz`)
   const extractedPath = await tc.extractTar(downloadPath)
   core.info('Writing Teleport binaries back to cache...')
-  const cachedPath = await tc.cacheDir(extractedPath, teleportToolName, version)
+  const cachedPath = await tc.cacheDir(extractedPath, toolName, version)
   core.addPath(cachedPath)
 }
 run().catch((error) => {
