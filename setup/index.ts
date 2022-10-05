@@ -44,6 +44,9 @@ function getInput (): Input {
   if (version === '') {
     throw new Error("'version' input must be non-empty")
   }
+  if (version.startsWith('v')) {
+    throw new Error("'version' input should not be ")
+  }
 
   return {
     version
@@ -70,7 +73,7 @@ async function run (): Promise<void> {
     `https://get.gravitational.com/teleport-${version}-bin.tar.gz`
   )
 
-  core.debug('Downloading extracting tar')
+  core.debug('Extracting tar')
   const extractedPath = await tc.extractTar(downloadPath, undefined, [
     'xz',
     '--strip', '1'
@@ -78,10 +81,6 @@ async function run (): Promise<void> {
 
   core.info('Fetched binaries from Teleport. Writing them back to cache...')
   const cachedPath = await tc.cacheDir(extractedPath, toolName, version)
-  core.debug(
-    `downloadPath: ${downloadPath}, extractedPath: ${extractedPath}, cachedPath: ${cachedPath}`
-  )
-
   core.addPath(cachedPath)
 }
 run().catch((error) => {

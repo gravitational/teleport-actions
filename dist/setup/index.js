@@ -6619,6 +6619,9 @@ function getInput() {
     if (version === '') {
         throw new Error("'version' input must be non-empty");
     }
+    if (version.startsWith('v')) {
+        throw new Error("'version' input should not be ");
+    }
     return {
         version
     };
@@ -6638,14 +6641,13 @@ function run() {
         core.info('Could not find Teleport binaries in cache. Fetching...');
         core.debug('Downloading tar');
         const downloadPath = yield tc.downloadTool(`https://get.gravitational.com/teleport-${version}-bin.tar.gz`);
-        core.debug('Downloading extracting tar');
+        core.debug('Extracting tar');
         const extractedPath = yield tc.extractTar(downloadPath, undefined, [
             'xz',
             '--strip', '1'
         ]);
         core.info('Fetched binaries from Teleport. Writing them back to cache...');
         const cachedPath = yield tc.cacheDir(extractedPath, toolName, version);
-        core.debug(`downloadPath: ${downloadPath}, extractedPath: ${extractedPath}, cachedPath: ${cachedPath}`);
         core.addPath(cachedPath);
     });
 }

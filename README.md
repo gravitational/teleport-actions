@@ -29,7 +29,22 @@ This project is currently experimental and more information about
 
 ### `@gravitational/teleport-actions/setup`
 
-`@gravitational/teleport-actions/setup` installs key Teleport binaries into
-your workflow environment, for example `tctl`, `tsh` and `tbot`.
+`setup` installs key Teleport binaries into your workflow environment, for
+example `tctl`, `tsh` and `tbot`. You can then use these within your workflows.
 
-The GitHub Actions cache is leveraged to increase the speed of this action.
+The GitHub Actions tool cache is used by the `setup` action in order to increase
+setup speed and reduce bandwidth usage on self-hosted runners.
+
+Usage:
+
+```yaml
+steps:
+- name: Checkout repository
+   uses: actions/checkout@v3
+- name: Setup teleport
+   uses: gravitational/teleport-actions/setup@v1
+   with:
+      # version must be specified, and exclude the "v" prefix.
+      # check https://goteleport.com/download/ for valid releases.
+      version: 10.3.1
+```
