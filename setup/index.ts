@@ -65,10 +65,13 @@ async function run (): Promise<void> {
   }
 
   core.info('Could not find Teleport binaries in cache. Fetching...')
+  core.debug('Downloading tar')
   const downloadPath = await tc.downloadTool(`https://get.gravitational.com/teleport-${version}-bin.tar.gz`)
+  core.debug('Downloading extracting tar')
   const extractedPath = await tc.extractTar(downloadPath)
-  core.info('Writing Teleport binaries back to cache...')
+  core.info('Fetched binaries from Teleport. Writing them back to cache...')
   const cachedPath = await tc.cacheDir(extractedPath, toolName, version)
+  core.debug(`downloadPath: ${downloadPath}, extractedPath: ${extractedPath}, cachedPath: ${cachedPath}`)
   core.addPath(cachedPath)
 }
 run().catch((error) => {

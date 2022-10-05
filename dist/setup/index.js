@@ -6636,10 +6636,13 @@ function run() {
             return;
         }
         core.info('Could not find Teleport binaries in cache. Fetching...');
+        core.debug('Downloading tar');
         const downloadPath = yield tc.downloadTool(`https://get.gravitational.com/teleport-${version}-bin.tar.gz`);
+        core.debug('Downloading extracting tar');
         const extractedPath = yield tc.extractTar(downloadPath);
-        core.info('Writing Teleport binaries back to cache...');
+        core.info('Fetched binaries from Teleport. Writing them back to cache...');
         const cachedPath = yield tc.cacheDir(extractedPath, toolName, version);
+        core.debug(`downloadPath: ${downloadPath}, extractedPath: ${extractedPath}, cachedPath: ${cachedPath}`);
         core.addPath(cachedPath);
     });
 }
