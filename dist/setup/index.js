@@ -6620,7 +6620,7 @@ function getInput() {
         throw new Error("'version' input must be non-empty");
     }
     if (version.startsWith('v')) {
-        throw new Error("'version' input should not be ");
+        throw new Error("'version' input should not be prefixed with 'v'");
     }
     return {
         version
