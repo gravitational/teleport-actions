@@ -16,6 +16,7 @@
 
 1. [Introduction](#introduction)
 1. [Actions](#actions)
+1. [Developing](#developing)
 
 ## Introduction
 
@@ -48,3 +49,19 @@ steps:
       # check https://goteleport.com/download/ for valid releases.
       version: 10.3.1
 ```
+
+## Developing
+
+This guidance applies to engineers wishing to make changes to Teleport's
+GitHub actions.
+
+Until we build a CI/CD flow for producing the built actions, we must ensure that
+we commit the compiled `.js` files. To do this run
+`yarn package-${ACTION_NAME}`.
+
+See the GitHub guidance for versioning:
+<https://github.com/actions/toolkit/blob/main/docs/action-versioning.md#recommendations>
+
+In order to allow us to make fixes to older major versions, we maintain a
+`branch/v${version}` which will diverge from `main`, with changes backported
+from `main` to the appropriate version branch.
