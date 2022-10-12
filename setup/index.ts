@@ -3,41 +3,43 @@ import os from 'os';
 import * as core from '@actions/core';
 import * as tc from '@actions/tool-cache';
 
+function getPlatform(rawPlatform: string): string {
+  switch (rawPlatform) {
+    case 'linux': {
+      return 'linux';
+    }
+  }
+  throw new Error(`platform ${rawPlatform} not supported`);
+}
+
+function getArch(rawArch: string): string {
+  switch (rawArch) {
+    case 'x64': {
+      return 'amd64';
+    }
+    case 'arm': {
+      return 'arm';
+    }
+    case 'arm64': {
+      return 'arm64';
+    }
+  }
+  throw new Error(`architecture ${rawArch} not supported`);
+}
+
+/**
+ * versionString converts a requested version, OS and architecture to a format
+ * which can be used to fetch a bundle from the Teleport download site.
+ */
 function versionString(
   rawPlatform: string,
   rawArch: string,
-  requestedVersion: string
+  version: string
 ): string {
-  let platform = '';
-  switch (rawPlatform) {
-    case 'linux': {
-      platform = 'linux';
-      break;
-    }
-    default: {
-      throw new Error(`platform ${rawPlatform} not supported`);
-    }
-  }
-  let arch = '';
-  switch (rawArch) {
-    case 'x64': {
-      arch = 'amd64';
-      break;
-    }
-    case 'arm': {
-      arch = 'arm';
-      break;
-    }
-    case 'arm64': {
-      arch = 'arm64';
-      break;
-    }
-    default: {
-      throw new Error(`architecture ${rawArch} not supported`);
-    }
-  }
+  const platform = getPlatform(rawPlatform);
+  const arch = getArch(rawArch);
 
-  return `v${requestedVersion}-${platform}-${arch}`;
+  return `v${version}-${platform}-${arch}`;
 }
 
 interface Input {

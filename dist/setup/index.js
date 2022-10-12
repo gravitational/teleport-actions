@@ -6583,36 +6583,36 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const os_1 = __importDefault(__nccwpck_require__(2037));
 const core = __importStar(__nccwpck_require__(2186));
 const tc = __importStar(__nccwpck_require__(7784));
-function versionString(rawPlatform, rawArch, requestedVersion) {
-    let platform = '';
+function getPlatform(rawPlatform) {
     switch (rawPlatform) {
         case 'linux': {
-            platform = 'linux';
-            break;
-        }
-        default: {
-            throw new Error(`platform ${rawPlatform} not supported`);
+            return 'linux';
         }
     }
-    let arch = '';
+    throw new Error(`platform ${rawPlatform} not supported`);
+}
+function getArch(rawArch) {
     switch (rawArch) {
         case 'x64': {
-            arch = 'amd64';
-            break;
+            return 'amd64';
         }
         case 'arm': {
-            arch = 'arm';
-            break;
+            return 'arm';
         }
         case 'arm64': {
-            arch = 'arm64';
-            break;
-        }
-        default: {
-            throw new Error(`architecture ${rawArch} not supported`);
+            return 'arm64';
         }
     }
-    return `v${requestedVersion}-${platform}-${arch}`;
+    throw new Error(`architecture ${rawArch} not supported`);
+}
+/**
+ * versionString converts a requested version, OS and architecture to a format
+ * which can be used to fetch a bundle from the Teleport download site.
+ */
+function versionString(rawPlatform, rawArch, version) {
+    const platform = getPlatform(rawPlatform);
+    const arch = getArch(rawArch);
+    return `v${version}-${platform}-${arch}`;
 }
 function getInput() {
     const version = core.getInput('version');
