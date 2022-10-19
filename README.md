@@ -55,9 +55,11 @@ steps:
 This guidance applies to engineers wishing to make changes to Teleport's
 GitHub actions.
 
-Until we build a CI/CD flow for producing the built actions, we must ensure that
-we commit the compiled `.js` files. To do this run
-`yarn package-${ACTION_NAME}`.
+Until we build a CI/CD flow for producing the built actions, we have provided
+a series of pre-commit hooks. These will ensure source files follow linter rules
+and also ensure that the built version of the action is up to date. Follow the
+quick-start instructions at <https://pre-commit.com/#quick-start> to install
+the pre-commit hooks.
 
 See the GitHub guidance for versioning:
 <https://github.com/actions/toolkit/blob/main/docs/action-versioning.md#recommendations>

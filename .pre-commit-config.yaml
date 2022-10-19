@@ -1,0 +1,11 @@
+repos:
+  - repo: local
+    hooks:
+      - id: package-setup
+        name: package-setup
+        entry: hooks/package-setup.sh
+        language: script
+      - id: lint
+        name: lint
+        entry: hooks/lint.sh
+        language: script
