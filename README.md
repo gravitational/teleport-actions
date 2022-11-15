@@ -50,6 +50,10 @@ steps:
       version: 10.3.1
 ```
 
+### `@gravitational/teleport-actions/auth-k8s`
+
+TODO: Document this action 😇
+
 ## Developing
 
 This guidance applies to engineers wishing to make changes to Teleport's
