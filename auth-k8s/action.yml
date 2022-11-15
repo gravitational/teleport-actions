@@ -2,9 +2,20 @@ name: 'Teleport Auth Kubernetes'
 description: 'Uses Machine ID to fetch credentials for use with a Kubernetes cluster. Automatically configure `KUBE_CONFIG` environment variable so invocations of `kubectl` and similar tools work as expected.'
 author: 'Gravitational Inc.'
 inputs:
-  version:
+  # These inputs are global to all Teleport tbot helper actions.
+  token:
     required: true
-    description: 'Specify the Teleport version without the preceding "v"'
+    description: 'Specify the Teleport token to use to join.'
+  auth-server:
+    required: false
+    description: 'Specify the address of your Teleport Auth server. One of "auth-server" or "proxy" must be set.'
+  proxy:
+    required: false
+    description: 'Specify the address of your Teleport Proxy. One of "auth-server" or "proxy" must be set.'
+  # These inputs are specific to auth-k8s
+  k8s-cluster:
+    required: true
+    description: 'Specify the name of the Kubernetes cluster in Teleport you wish to connect to.'
 runs:
   using: 'node16'
   main: '../dist/auth-k8s/index.js'

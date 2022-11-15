@@ -1,2 +1,2 @@
 #!/bin/sh
-yarn package-setup
+yarn package:setup

@@ -1,3 +1,8 @@
+import * as core from '@actions/core';
+
 import * as tbot from '../lib/tbot';
 
-tbot.foo();
+async function run() {
+  tbot.foo();
+}
+run().catch(core.setFailed);
