@@ -54,9 +54,12 @@ function getInput(): Input {
   if (version.startsWith('v')) {
     throw new Error("'version' input should not be prefixed with 'v'");
   }
-  if (version.split('.').length !== 3) {
+  const versionRegex =
+    /^([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$/i;
+
+  if (!versionRegex.test(version)) {
     throw new Error(
-      "'version' input should specify the entire Teleport version e.g 11.0.1"
+      "incorrect 'version' specified, it should include all parts of the version e.g 11.0.1"
     );
   }
 
