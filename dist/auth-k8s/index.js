@@ -2730,7 +2730,17 @@ const core = __importStar(__nccwpck_require__(186));
 const tbot = __importStar(__nccwpck_require__(229));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
-        tbot.foo();
+        const sharedInputs = tbot.getSharedInputs();
+        const config = tbot.baseConfigurationFromSharedInputs(sharedInputs);
+        config.destinations.push({
+            directory: {
+                path: '/kube/config/dir',
+            },
+            roles: [],
+            kubernetes_cluster: 'foo-bar-bizz',
+        });
+        const configPath = tbot.writeConfiguration(config);
+        yield tbot.execute(configPath);
     });
 }
 run().catch(core.setFailed);
@@ -2766,13 +2776,57 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.foo = void 0;
+exports.execute = exports.writeConfiguration = exports.baseConfigurationFromSharedInputs = exports.getSharedInputs = void 0;
 const core = __importStar(__nccwpck_require__(186));
-function foo() {
-    core.info('foo!');
+function getSharedInputs() {
+    const proxy = core.getInput('proxy', { required: true });
+    const token = core.getInput('token', { required: true });
+    return {
+        proxy,
+        token,
+        debug: core.isDebug(),
+    };
 }
-exports.foo = foo;
+exports.getSharedInputs = getSharedInputs;
+function baseConfigurationFromSharedInputs(inputs) {
+    return {
+        auth_server: inputs.proxy,
+        oneshot: true,
+        debug: inputs.debug,
+        onboarding: {
+            join_method: 'github',
+            token: inputs.token,
+        },
+        storage: {
+            // We use memory storage here so we avoid ever writing the bots more
+            // powerful credentials to disk.
+            memory: true,
+        },
+        destinations: [],
+    };
+}
+exports.baseConfigurationFromSharedInputs = baseConfigurationFromSharedInputs;
+function writeConfiguration(config) {
+    core.info('writing config to, with values' + config);
+    return ''; // This will eventually be the path to the config to pass into execute
+}
+exports.writeConfiguration = writeConfiguration;
+function execute(configPath) {
+    return __awaiter(this, void 0, void 0, function* () {
+        core.info('here we will run tbot --oneshot w/ ' + configPath);
+    });
+}
+exports.execute = execute;
 
 
 /***/ }),
