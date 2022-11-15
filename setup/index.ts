@@ -54,6 +54,14 @@ function getInput(): Input {
   if (version.startsWith('v')) {
     throw new Error("'version' input should not be prefixed with 'v'");
   }
+  const versionRegex =
+    /^([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$/i;
+
+  if (!versionRegex.test(version)) {
+    throw new Error(
+      "incorrect 'version' specified, it should include all parts of the version e.g 11.0.1"
+    );
+  }
 
   return {
     version,
@@ -63,36 +71,32 @@ function getInput(): Input {
 const toolName = 'teleport';
 
 async function run(): Promise<void> {
-  try {
-    const input = getInput();
-    const version = versionString(os.platform(), os.arch(), input.version);
-    core.info(`Installing Teleport ${version}`);
+  const input = getInput();
+  const version = versionString(os.platform(), os.arch(), input.version);
+  core.info(`Installing Teleport ${version}`);
 
-    const toolPath = tc.find(toolName, version);
-    if (toolPath !== '') {
-      core.info('Teleport binaries found in cache.');
-      core.addPath(toolPath);
-      return;
-    }
-
-    core.info('Could not find Teleport binaries in cache. Fetching...');
-    core.debug('Downloading tar');
-    const downloadPath = await tc.downloadTool(
-      `https://get.gravitational.com/teleport-${version}-bin.tar.gz`
-    );
-
-    core.debug('Extracting tar');
-    const extractedPath = await tc.extractTar(downloadPath, undefined, [
-      'xz',
-      '--strip',
-      '1',
-    ]);
-
-    core.info('Fetched binaries from Teleport. Writing them back to cache...');
-    const cachedPath = await tc.cacheDir(extractedPath, toolName, version);
-    core.addPath(cachedPath);
-  } catch (err: any) {
-    core.setFailed(err.message || err);
+  const toolPath = tc.find(toolName, version);
+  if (toolPath !== '') {
+    core.info('Teleport binaries found in cache.');
+    core.addPath(toolPath);
+    return;
   }
+
+  core.info('Could not find Teleport binaries in cache. Fetching...');
+  core.debug('Downloading tar');
+  const downloadPath = await tc.downloadTool(
+    `https://get.gravitational.com/teleport-${version}-bin.tar.gz`
+  );
+
+  core.debug('Extracting tar');
+  const extractedPath = await tc.extractTar(downloadPath, undefined, [
+    'xz',
+    '--strip',
+    '1',
+  ]);
+
+  core.info('Fetched binaries from Teleport. Writing them back to cache...');
+  const cachedPath = await tc.cacheDir(extractedPath, toolName, version);
+  core.addPath(cachedPath);
 }
-run();
+run().catch(core.setFailed);
