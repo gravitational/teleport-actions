@@ -1,8 +1,31 @@
+import * as fs from 'fs/promises';
+import * as path from 'path';
+
 import * as core from '@actions/core';
+import * as exec from '@actions/exec';
+import * as yaml from 'yaml';
+
+import * as io from '../io';
+
+export interface SharedInputs {
+  proxy: string;
+  token: string;
+  debug: boolean;
+}
+
+export function getSharedInputs(): SharedInputs {
+  const proxy = core.getInput('proxy', { required: true });
+  const token = core.getInput('token', { required: true });
+
+  return {
+    proxy,
+    token,
+    debug: core.isDebug(),
+  };
+}
 
 // See https://github.com/gravitational/teleport/blob/master/lib/tbot/config/config.go#L206
 // For configuration references
-
 export interface ConfigurationV1Destination {
   directory: {
     path: string;
@@ -25,23 +48,6 @@ export interface ConfigurationV1 {
   destinations: Array<ConfigurationV1Destination>;
 }
 
-export interface SharedInputs {
-  proxy: string;
-  token: string;
-  debug: boolean;
-}
-
-export function getSharedInputs(): SharedInputs {
-  const proxy = core.getInput('proxy', { required: true });
-  const token = core.getInput('token', { required: true });
-
-  return {
-    proxy,
-    token,
-    debug: core.isDebug(),
-  };
-}
-
 export function baseConfigurationFromSharedInputs(
   inputs: SharedInputs
 ): ConfigurationV1 {
@@ -62,11 +68,16 @@ export function baseConfigurationFromSharedInputs(
   };
 }
 
-export function writeConfiguration(config: ConfigurationV1): string {
-  core.info('writing config to, with values' + config);
-  return ''; // This will eventually be the path to the config to pass into execute
+export async function writeConfiguration(
+  config: ConfigurationV1
+): Promise<string> {
+  const tempDir = await io.makeTempDirectory();
+  const configPath = path.join(tempDir, 'bot-config.yaml');
+  const data = yaml.stringify(config);
+  await fs.writeFile(configPath, data);
+  return configPath;
 }
 
 export async function execute(configPath: string) {
-  core.info('here we will run tbot --oneshot w/ ' + configPath);
+  await exec.exec('tbot', ['start', '-c', configPath]);
 }
