@@ -6622,6 +6622,10 @@ function getInput() {
     if (version.startsWith('v')) {
         throw new Error("'version' input should not be prefixed with 'v'");
     }
+    const versionRegex = /^([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$/i;
+    if (!versionRegex.test(version)) {
+        throw new Error("incorrect 'version' specified, it should include all parts of the version e.g 11.0.1");
+    }
     return {
         version,
     };
