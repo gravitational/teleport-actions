@@ -6,7 +6,20 @@ import { stringify } from 'yaml';
 
 import * as tbot from '../lib/tbot';
 
+interface Inputs {
+  kubernetesCluster: string;
+}
+
+function getInputs(): Inputs {
+  return {
+    kubernetesCluster: core.getInput('kubernetes-cluster', {
+      required: true,
+    }),
+  };
+}
+
 async function run() {
+  const inputs = getInputs();
   const sharedInputs = tbot.getSharedInputs();
   const config = tbot.baseConfigurationFromSharedInputs(sharedInputs);
 
@@ -17,9 +30,7 @@ async function run() {
       path: destinationPath,
     },
     roles: [], // Use all assigned to bot,
-    kubernetes_cluster: core.getInput('kubernetes-cluster', {
-      required: true,
-    }),
+    kubernetes_cluster: inputs.kubernetesCluster,
   });
 
   const configPath = await tbot.writeConfiguration(config);

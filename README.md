@@ -36,23 +36,55 @@ example `tctl`, `tsh` and `tbot`. You can then use these within your workflows.
 The GitHub Actions tool cache is used by the `setup` action in order to increase
 setup speed and reduce bandwidth usage on self-hosted runners.
 
-Usage:
+Example usage:
 
 ```yaml
 steps:
-- name: Checkout repository
-   uses: actions/checkout@v3
-- name: Setup teleport
-   uses: gravitational/teleport-actions/setup@v1
-   with:
+  - name: Install Teleport
+    uses: gravitational/teleport-actions/setup@v1
+    with:
       # version must be specified, and exclude the "v" prefix.
       # check https://goteleport.com/download/ for valid releases.
-      version: 10.3.1
+      version: 11.0.3
 ```
 
 ### `@gravitational/teleport-actions/auth-k8s`
 
-TODO: Document this action 😇
+`auth-k8s` uses Teleport Machine ID to authorise your GitHub Action workflow
+to access a named Kubernetes cluster protected by Teleport.
+
+Pre-requisites:
+
+- Teleport 11 or above must be used.
+- Teleport binaries must already be installed in the workflow environment.
+- The Kubernetes cluster you wish to access must already be connected to your
+  Teleport cluster. See
+  <https://goteleport.com/docs/kubernetes-access/getting-started/>
+- You must have created a bot with a role with access to your Kubernetes cluster
+  and create a GitHub join token that allows that bot to join.
+
+Example usage:
+
+```yaml
+steps:
+  - name: Install Kubectl
+    uses: azure/setup-kubectl@v3
+  - name: Install Teleport
+    uses: gravitational/teleport-actions/setup@v1
+    with:
+      version: 11.0.1
+  - name: Authorize against Teleport
+    uses: gravitational/teleport-actions/auth-k8s@v1
+    with:
+      # Specify the publically accessible address of your Teleport proxy.
+      proxy: tele.example.com:443
+      # Specify the name of the join token for your bot.
+      token: my-github-join-token
+      # Specify the name of the Kubernetes cluster you wish to access.
+      kubernetes-cluster: my-kubernetes-cluster
+  - name: List pods
+    run: kubectl get pods
+```
 
 ## Developing
 
