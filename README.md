@@ -50,13 +50,17 @@ steps:
 
 ### `@gravitational/teleport-actions/auth-k8s`
 
-`auth-k8s` uses Teleport Machine ID to authorise your GitHub Action workflow
-to access a named Kubernetes cluster protected by Teleport.
+`auth-k8s` uses Teleport Machine ID to generate an authorized Kubernetes client
+configuration for a specified cluster protected by Teleport.
+
+The action sets the `KUBECONFIG` environment variable for consecutive steps in
+the job, meaning that tools like `kubectl` will automatically connect to the
+requested Kubernetes cluster without additional configuration.
 
 Pre-requisites:
 
 - Teleport 11 or above must be used.
-- Teleport binaries must already be installed in the workflow environment.
+- Teleport binaries must already be installed in the job environment.
 - The Kubernetes cluster you wish to access must already be connected to your
   Teleport cluster. See
   <https://goteleport.com/docs/kubernetes-access/getting-started/>
@@ -72,7 +76,7 @@ steps:
   - name: Install Teleport
     uses: gravitational/teleport-actions/setup@v1
     with:
-      version: 11.0.1
+      version: 11.0.3
   - name: Authorize against Teleport
     uses: gravitational/teleport-actions/auth-k8s@v1
     with:
