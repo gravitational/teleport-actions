@@ -4011,7 +4011,9 @@ function run() {
                 path: destinationPath,
             },
             roles: [],
-            kubernetes_cluster: 'foo-bar-bizz',
+            kubernetes_cluster: core.getInput('kubernetes-cluster', {
+                required: true,
+            }),
         });
         const configPath = yield tbot.writeConfiguration(config);
         core.info('Invoking tbot with configuration at ' + configPath);

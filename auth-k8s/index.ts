@@ -17,7 +17,9 @@ async function run() {
       path: destinationPath,
     },
     roles: [], // Use all assigned to bot,
-    kubernetes_cluster: 'foo-bar-bizz',
+    kubernetes_cluster: core.getInput('kubernetes-cluster', {
+      required: true,
+    }),
   });
 
   const configPath = await tbot.writeConfiguration(config);
