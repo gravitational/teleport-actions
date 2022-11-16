@@ -4024,7 +4024,7 @@ function run() {
         const configPath = yield tbot.writeConfiguration(config);
         core.info('Invoking tbot with configuration at ' + configPath);
         core.info('Credentials will be output to ' + destinationPath);
-        core.debug((0, yaml_1.stringify)(config));
+        core.debug('tbot configuration:\n' + (0, yaml_1.stringify)(config));
         yield tbot.execute(configPath);
         core.exportVariable('KUBECONFIG', path_1.default.join(destinationPath, '/kubeconfig.yaml'));
     });

@@ -37,7 +37,7 @@ async function run() {
 
   core.info('Invoking tbot with configuration at ' + configPath);
   core.info('Credentials will be output to ' + destinationPath);
-  core.debug(stringify(config));
+  core.debug('tbot configuration:\n' + stringify(config));
   await tbot.execute(configPath);
 
   core.exportVariable(
