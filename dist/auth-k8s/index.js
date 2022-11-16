@@ -4020,7 +4020,7 @@ function run() {
         core.info('Credentials will be output to ' + destinationPath);
         core.debug((0, yaml_1.stringify)(config));
         yield tbot.execute(configPath);
-        core.exportVariable('KUBE_CONFIG', path_1.default.join(destinationPath, '/kubeconfig.yaml'));
+        core.exportVariable('KUBECONFIG', path_1.default.join(destinationPath, '/kubeconfig.yaml'));
     });
 }
 run().catch(core.setFailed);

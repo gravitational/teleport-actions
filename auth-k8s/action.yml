@@ -10,7 +10,7 @@ inputs:
     description: 'Specify the address of your Teleport Proxy.'
     required: true
   # These inputs are specific to auth-k8s
-  k8s-cluster:
+  kubernetes-cluster:
     description: 'Specify the name of the Kubernetes cluster in Teleport you wish to connect to.'
     required: true
 runs:

@@ -30,7 +30,7 @@ async function run() {
   await tbot.execute(configPath);
 
   core.exportVariable(
-    'KUBE_CONFIG',
+    'KUBECONFIG',
     path.join(destinationPath, '/kubeconfig.yaml')
   );
 }
