@@ -6614,7 +6614,7 @@ function versionString(rawPlatform, rawArch, version) {
     const arch = getArch(rawArch);
     return `v${version}-${platform}-${arch}`;
 }
-function getInput() {
+function getInputs() {
     const version = core.getInput('version');
     if (version === '') {
         throw new Error("'version' input must be non-empty");
@@ -6633,8 +6633,8 @@ function getInput() {
 const toolName = 'teleport';
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
-        const input = getInput();
-        const version = versionString(os_1.default.platform(), os_1.default.arch(), input.version);
+        const inputs = getInputs();
+        const version = versionString(os_1.default.platform(), os_1.default.arch(), inputs.version);
         core.info(`Installing Teleport ${version}`);
         const toolPath = tc.find(toolName, version);
         if (toolPath !== '') {
