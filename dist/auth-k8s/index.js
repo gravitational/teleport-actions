@@ -4000,6 +4000,7 @@ const path_1 = __importDefault(__nccwpck_require__(1017));
 const core = __importStar(__nccwpck_require__(2186));
 const yaml_1 = __nccwpck_require__(4083);
 const tbot = __importStar(__nccwpck_require__(2229));
+const io = __importStar(__nccwpck_require__(9317));
 function getInputs() {
     return {
         kubernetesCluster: core.getInput('kubernetes-cluster', {
@@ -4013,7 +4014,7 @@ function run() {
         const sharedInputs = tbot.getSharedInputs();
         const config = tbot.baseConfigurationFromSharedInputs(sharedInputs);
         // TODO(strideynet): consider if we want to make this use a temp dir instead
-        const destinationPath = '/opt/machine-id-kube-dest';
+        const destinationPath = yield io.makeTempDirectory();
         config.destinations.push({
             directory: {
                 path: destinationPath,

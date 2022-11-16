@@ -5,6 +5,7 @@ import * as core from '@actions/core';
 import { stringify } from 'yaml';
 
 import * as tbot from '../lib/tbot';
+import * as io from '../lib/io';
 
 interface Inputs {
   kubernetesCluster: string;
@@ -24,7 +25,7 @@ async function run() {
   const config = tbot.baseConfigurationFromSharedInputs(sharedInputs);
 
   // TODO(strideynet): consider if we want to make this use a temp dir instead
-  const destinationPath = '/opt/machine-id-kube-dest';
+  const destinationPath = await io.makeTempDirectory();
   config.destinations.push({
     directory: {
       path: destinationPath,
