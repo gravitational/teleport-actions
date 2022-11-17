@@ -24,7 +24,7 @@ async function run() {
   const sharedInputs = tbot.getSharedInputs();
   const config = tbot.baseConfigurationFromSharedInputs(sharedInputs);
 
-  // TODO(strideynet): consider if we want to make this use a temp dir instead
+  // Inject a destination for the Kubernetes cluster credentials
   const destinationPath = await io.makeTempDirectory();
   config.destinations.push({
     directory: {

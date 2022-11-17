@@ -4013,7 +4013,7 @@ function run() {
         const inputs = getInputs();
         const sharedInputs = tbot.getSharedInputs();
         const config = tbot.baseConfigurationFromSharedInputs(sharedInputs);
-        // TODO(strideynet): consider if we want to make this use a temp dir instead
+        // Inject a destination for the Kubernetes cluster credentials
         const destinationPath = yield io.makeTempDirectory();
         config.destinations.push({
             directory: {
@@ -4076,10 +4076,14 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.makeTempDirectory = void 0;
 const path = __importStar(__nccwpck_require__(1017));
 const crypto_1 = __nccwpck_require__(6113);
+const os_1 = __nccwpck_require__(2037);
 const io = __importStar(__nccwpck_require__(7436));
 function makeTempDirectory() {
     return __awaiter(this, void 0, void 0, function* () {
         // TODO(strideynet): make all of this work with Mac/Windows runners
+        if ((0, os_1.platform)() !== 'linux') {
+            throw new Error('this action is currently only supported on Linux runners');
+        }
         let basePath = process.env['RUNNER_TEMP'];
         if (!basePath) {
             basePath = path.join('/home', 'actions', 'temp');
