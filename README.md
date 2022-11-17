@@ -36,6 +36,10 @@ example `tctl`, `tsh` and `tbot`. You can then use these within your workflows.
 The GitHub Actions tool cache is used by the `setup` action in order to increase
 setup speed and reduce bandwidth usage on self-hosted runners.
 
+Pre-requisites:
+
+- A Linux based runner.
+
 Example usage:
 
 ```yaml
