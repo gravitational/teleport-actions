@@ -5,6 +5,10 @@ repos:
         name: package-setup
         entry: hooks/package-setup.sh
         language: script
+      - id: package-auth-k8s
+        name: package-auth-k8s
+        entry: hooks/package-auth-k8s.sh
+        language: script
       - id: lint
         name: lint
         entry: hooks/lint.sh

@@ -6,11 +6,13 @@
     "prettier-check": "yarn prettier --check .",
     "eslint": "eslint --ext .ts .",
     "lint": "yarn eslint && yarn prettier-check",
-    "package-setup": "ncc build ./setup/index.ts -o dist/setup"
+    "package:setup": "ncc build ./setup/index.ts -o dist/setup",
+    "package:auth-k8s": "ncc build ./auth-k8s/index.ts -o dist/auth-k8s"
   },
   "dependencies": {
     "@actions/core": "^1.10.0",
-    "@actions/tool-cache": "^2.0.1"
+    "@actions/tool-cache": "^2.0.1",
+    "yaml": "^2.1.3"
   },
   "devDependencies": {
     "@types/node": "^18.8.2",
