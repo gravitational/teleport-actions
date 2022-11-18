@@ -89,6 +89,9 @@ steps:
       proxy: tele.example.com:443
       # Specify the name of the join token for your bot.
       token: my-github-join-token
+      # Specify the length of time that the generated credentials should be
+      # valid for. This is optional and defaults to "1h"
+      certificate-ttl: 1h
       # Specify the name of the Kubernetes cluster you wish to access.
       kubernetes-cluster: my-kubernetes-cluster
   - name: List pods
