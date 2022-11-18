@@ -11,15 +11,17 @@ export interface SharedInputs {
   proxy: string;
   token: string;
   debug: boolean;
+  certificateTTL: string;
 }
 
 export function getSharedInputs(): SharedInputs {
   const proxy = core.getInput('proxy', { required: true });
   const token = core.getInput('token', { required: true });
-
+  const certificateTTL = core.getInput('certificate-ttl');
   return {
     proxy,
     token,
+    certificateTTL,
     debug: core.isDebug(),
   };
 }
@@ -37,6 +39,7 @@ export interface ConfigurationV1 {
   auth_server: string;
   oneshot: boolean;
   debug: boolean;
+  certificate_ttl?: string;
   onboarding: {
     join_method: string;
     token: string;
@@ -51,7 +54,7 @@ export interface ConfigurationV1 {
 export function baseConfigurationFromSharedInputs(
   inputs: SharedInputs
 ): ConfigurationV1 {
-  return {
+  const cfg: ConfigurationV1 = {
     auth_server: inputs.proxy,
     oneshot: true,
     debug: inputs.debug,
@@ -66,6 +69,12 @@ export function baseConfigurationFromSharedInputs(
     },
     destinations: [],
   };
+
+  if (inputs.certificateTTL) {
+    cfg.certificate_ttl = inputs.certificateTTL;
+  }
+
+  return cfg;
 }
 
 export async function writeConfiguration(

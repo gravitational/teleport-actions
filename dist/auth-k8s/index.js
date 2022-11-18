@@ -4146,15 +4146,17 @@ const io = __importStar(__nccwpck_require__(9317));
 function getSharedInputs() {
     const proxy = core.getInput('proxy', { required: true });
     const token = core.getInput('token', { required: true });
+    const certificateTTL = core.getInput('certificate-ttl');
     return {
         proxy,
         token,
+        certificateTTL,
         debug: core.isDebug(),
     };
 }
 exports.getSharedInputs = getSharedInputs;
 function baseConfigurationFromSharedInputs(inputs) {
-    return {
+    const cfg = {
         auth_server: inputs.proxy,
         oneshot: true,
         debug: inputs.debug,
@@ -4169,6 +4171,10 @@ function baseConfigurationFromSharedInputs(inputs) {
         },
         destinations: [],
     };
+    if (inputs.certificateTTL) {
+        cfg.certificate_ttl = inputs.certificateTTL;
+    }
+    return cfg;
 }
 exports.baseConfigurationFromSharedInputs = baseConfigurationFromSharedInputs;
 function writeConfiguration(config) {
