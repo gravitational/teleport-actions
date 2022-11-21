@@ -88,9 +88,14 @@ steps:
       # Specify the length of time that the generated credentials should be
       # valid for. This is optional and defaults to "1h"
       certificate-ttl: 1h
-  - name: List nodes
-    run: tsh -i ${{ steps.auth.outputs.identity-file }} --proxy tele.example.com:443 ls
+  - name: List nodes (tsh)
+    run: tsh -i ${{ steps.auth.outputs.identity-file }} ls
+  - name: List nodes (tctl)
+    run: tctl -i ${{ steps.auth.outputs.identity-file }} --auth-server tele.example.com:443 nodes ls
 ```
+
+Note that `tsh` and `tctl` require the flag pointing at the identity file and
+`tctl` also requires the address of the Proxy or Auth Server to be provided.
 
 ### `@gravitational/teleport-actions/auth-k8s`
 
