@@ -52,6 +52,46 @@ steps:
       version: 11.0.3
 ```
 
+### `@gravitational/teleport-actions/auth`
+
+`auth` uses Teleport Machine ID to generate a set of credentials which can be
+used with other Teleport client tools such as `tsh` and `tctl`.
+
+The action has the following outputs:
+
+- `identity-file`: the path to the identity file which can be used with `tctl` and `tsh`.
+
+Pre-requisites:
+
+- Teleport 11 or above must be used.
+- Teleport binaries must already be installed in the job environment.
+- You must have created a bot and created a GitHub join token that allows that
+  bot to join.
+- A Linux based runner.
+
+Example usage:
+
+```yaml
+steps:
+  - name: Install Teleport
+    uses: gravitational/teleport-actions/setup@v1
+    with:
+      version: 11.0.3
+  - name: Authorize against Teleport
+    id: auth
+    uses: gravitational/teleport-actions/auth@v1
+    with:
+      # Specify the publically accessible address of your Teleport proxy.
+      proxy: tele.example.com:443
+      # Specify the name of the join token for your bot.
+      token: my-github-join-token
+      # Specify the length of time that the generated credentials should be
+      # valid for. This is optional and defaults to "1h"
+      certificate-ttl: 1h
+  - name: List nodes
+    run: tsh -i ${{ steps.auth.outputs.identity-file }} --proxy tele.example.com:443 ls
+```
+
 ### `@gravitational/teleport-actions/auth-k8s`
 
 `auth-k8s` uses Teleport Machine ID to generate an authorized Kubernetes client
@@ -70,7 +110,7 @@ Pre-requisites:
   <https://goteleport.com/docs/kubernetes-access/getting-started/>
 - You must have created a bot with a role with access to your Kubernetes cluster
   and create a GitHub join token that allows that bot to join.
-- A Linux based runner
+- A Linux based runner.
 
 Example usage:
 
