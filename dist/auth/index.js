@@ -4165,10 +4165,11 @@ function baseConfigurationFromSharedInputs(inputs) {
 exports.baseConfigurationFromSharedInputs = baseConfigurationFromSharedInputs;
 function writeConfiguration(config) {
     return __awaiter(this, void 0, void 0, function* () {
-        core.debug('Writing tbot configuration:\n' + yaml.stringify(config));
         const tempDir = yield io.makeTempDirectory();
         const configPath = path.join(tempDir, 'bot-config.yaml');
         const data = yaml.stringify(config);
+        core.debug('Writing tbot configuration to ' + configPath);
+        core.debug('Configuration value:\n' + data);
         yield fs.writeFile(configPath, data);
         return configPath;
     });

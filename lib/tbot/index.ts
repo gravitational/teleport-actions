@@ -80,11 +80,12 @@ export function baseConfigurationFromSharedInputs(
 export async function writeConfiguration(
   config: ConfigurationV1
 ): Promise<string> {
-  core.debug('Writing tbot configuration:\n' + yaml.stringify(config));
-
   const tempDir = await io.makeTempDirectory();
   const configPath = path.join(tempDir, 'bot-config.yaml');
   const data = yaml.stringify(config);
+
+  core.debug('Writing tbot configuration to ' + configPath);
+  core.debug('Configuration value:\n' + data);
   await fs.writeFile(configPath, data);
   return configPath;
 }
