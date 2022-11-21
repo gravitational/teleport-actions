@@ -80,6 +80,8 @@ export function baseConfigurationFromSharedInputs(
 export async function writeConfiguration(
   config: ConfigurationV1
 ): Promise<string> {
+  core.debug('Writing tbot configuration:\n' + yaml.stringify(config));
+
   const tempDir = await io.makeTempDirectory();
   const configPath = path.join(tempDir, 'bot-config.yaml');
   const data = yaml.stringify(config);
@@ -88,5 +90,6 @@ export async function writeConfiguration(
 }
 
 export async function execute(configPath: string) {
+  core.info('Invoking tbot with configuration at ' + configPath);
   await exec.exec('tbot', ['start', '-c', configPath]);
 }
