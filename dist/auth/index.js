@@ -4013,7 +4013,10 @@ function run() {
         });
         const configPath = yield tbot.writeConfiguration(config);
         yield tbot.execute(configPath);
-        core.setOutput('identity-file', path_1.default.join(destinationPath, 'identity'));
+        const identityFilePath = path_1.default.join(destinationPath, 'identity');
+        core.setOutput('identity-file', identityFilePath);
+        core.exportVariable('TELEPORT_PROXY', sharedInputs.proxy);
+        core.exportVariable('TELEPORT_IDENTITY_FILE', identityFilePath);
     });
 }
 run().catch(core.setFailed);

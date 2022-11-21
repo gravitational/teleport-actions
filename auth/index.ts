@@ -19,6 +19,10 @@ async function run() {
 
   const configPath = await tbot.writeConfiguration(config);
   await tbot.execute(configPath);
-  core.setOutput('identity-file', path.join(destinationPath, 'identity'));
+
+  const identityFilePath = path.join(destinationPath, 'identity');
+  core.setOutput('identity-file', identityFilePath);
+  core.exportVariable('TELEPORT_PROXY', sharedInputs.proxy);
+  core.exportVariable('TELEPORT_IDENTITY_FILE', identityFilePath);
 }
 run().catch(core.setFailed);
