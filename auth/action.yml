@@ -1,6 +1,6 @@
 name: 'Teleport Auth'
 description: 'Uses Machine ID to fetch credentials for use with `tctl` and `tsh`. Automatically configures `tctl` and `tsh` to use these credentials in following steps.'
-author: 'Gravitational Inc.'
+author: 'Gravitational, Inc.'
 inputs:
   # These inputs are global to all Teleport tbot helper actions.
   token:
