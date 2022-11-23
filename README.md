@@ -84,7 +84,7 @@ steps:
       # Specify the publically accessible address of your Teleport proxy.
       proxy: tele.example.com:443
       # Specify the name of the join token for your bot.
-      token: my-github-join-token
+      token: my-github-join-token-name
       # Specify the length of time that the generated credentials should be
       # valid for. This is optional and defaults to "1h"
       certificate-ttl: 1h
@@ -133,7 +133,7 @@ steps:
       # Specify the publically accessible address of your Teleport proxy.
       proxy: tele.example.com:443
       # Specify the name of the join token for your bot.
-      token: my-github-join-token
+      token: my-github-join-token-name
       # Specify the length of time that the generated credentials should be
       # valid for. This is optional and defaults to "1h"
       certificate-ttl: 1h
