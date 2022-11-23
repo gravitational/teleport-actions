@@ -7,7 +7,8 @@
     "eslint": "eslint --ext .ts .",
     "lint": "yarn eslint && yarn prettier-check",
     "package:setup": "ncc build ./setup/index.ts -o dist/setup",
-    "package:auth-k8s": "ncc build ./auth-k8s/index.ts -o dist/auth-k8s"
+    "package:auth-k8s": "ncc build ./auth-k8s/index.ts -o dist/auth-k8s",
+    "package:auth": "ncc build ./auth/index.ts -o dist/auth"
   },
   "dependencies": {
     "@actions/core": "^1.10.0",

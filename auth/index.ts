@@ -5,39 +5,24 @@ import * as core from '@actions/core';
 import * as tbot from '../lib/tbot';
 import * as io from '../lib/io';
 
-interface Inputs {
-  kubernetesCluster: string;
-}
-
-function getInputs(): Inputs {
-  return {
-    kubernetesCluster: core.getInput('kubernetes-cluster', {
-      required: true,
-    }),
-  };
-}
-
 async function run() {
-  const inputs = getInputs();
   const sharedInputs = tbot.getSharedInputs();
   const config = tbot.baseConfigurationFromSharedInputs(sharedInputs);
 
-  // Inject a destination for the Kubernetes cluster credentials
   const destinationPath = await io.makeTempDirectory();
   config.destinations.push({
     directory: {
       path: destinationPath,
     },
     roles: [], // Use all assigned to bot,
-    kubernetes_cluster: inputs.kubernetesCluster,
   });
 
   const configPath = await tbot.writeConfiguration(config);
   await tbot.execute(configPath);
 
-  core.exportVariable(
-    'KUBECONFIG',
-    path.join(destinationPath, '/kubeconfig.yaml')
-  );
+  const identityFilePath = path.join(destinationPath, 'identity');
+  core.setOutput('identity-file', identityFilePath);
+  core.exportVariable('TELEPORT_PROXY', sharedInputs.proxy);
+  core.exportVariable('TELEPORT_IDENTITY_FILE', identityFilePath);
 }
 run().catch(core.setFailed);

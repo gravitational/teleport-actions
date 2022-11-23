@@ -83,10 +83,14 @@ export async function writeConfiguration(
   const tempDir = await io.makeTempDirectory();
   const configPath = path.join(tempDir, 'bot-config.yaml');
   const data = yaml.stringify(config);
+
+  core.debug('Writing tbot configuration to ' + configPath);
+  core.debug('Configuration value:\n' + data);
   await fs.writeFile(configPath, data);
   return configPath;
 }
 
 export async function execute(configPath: string) {
+  core.info('Invoking tbot with configuration at ' + configPath);
   await exec.exec('tbot', ['start', '-c', configPath]);
 }

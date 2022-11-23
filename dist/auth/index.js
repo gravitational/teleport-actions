@@ -3955,7 +3955,7 @@ exports.debug = debug; // for test
 
 /***/ }),
 
-/***/ 7410:
+/***/ 6099:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -4000,30 +4000,23 @@ const path_1 = __importDefault(__nccwpck_require__(1017));
 const core = __importStar(__nccwpck_require__(2186));
 const tbot = __importStar(__nccwpck_require__(2229));
 const io = __importStar(__nccwpck_require__(9317));
-function getInputs() {
-    return {
-        kubernetesCluster: core.getInput('kubernetes-cluster', {
-            required: true,
-        }),
-    };
-}
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
-        const inputs = getInputs();
         const sharedInputs = tbot.getSharedInputs();
         const config = tbot.baseConfigurationFromSharedInputs(sharedInputs);
-        // Inject a destination for the Kubernetes cluster credentials
         const destinationPath = yield io.makeTempDirectory();
         config.destinations.push({
             directory: {
                 path: destinationPath,
             },
-            roles: [],
-            kubernetes_cluster: inputs.kubernetesCluster,
+            roles: [], // Use all assigned to bot,
         });
         const configPath = yield tbot.writeConfiguration(config);
         yield tbot.execute(configPath);
-        core.exportVariable('KUBECONFIG', path_1.default.join(destinationPath, '/kubeconfig.yaml'));
+        const identityFilePath = path_1.default.join(destinationPath, 'identity');
+        core.setOutput('identity-file', identityFilePath);
+        core.exportVariable('TELEPORT_PROXY', sharedInputs.proxy);
+        core.exportVariable('TELEPORT_IDENTITY_FILE', identityFilePath);
     });
 }
 run().catch(core.setFailed);
@@ -12656,7 +12649,7 @@ exports.visitAsync = visitAsync;
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __nccwpck_require__(7410);
+/******/ 	var __webpack_exports__ = __nccwpck_require__(6099);
 /******/ 	module.exports = __webpack_exports__;
 /******/ 	
 /******/ })()
