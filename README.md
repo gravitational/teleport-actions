@@ -54,6 +54,8 @@ steps:
 
 ### `@gravitational/teleport-actions/auth`
 
+> :warning: **This is a preview action.** No v1 has been released yet. We hope to ship this in coming weeks.
+
 `auth` uses Teleport Machine ID to generate a set of credentials which can be
 used with other Teleport client tools such as `tsh` and `tctl`.
 
@@ -79,7 +81,7 @@ steps:
       version: 11.0.3
   - name: Authorize against Teleport
     id: auth
-    uses: gravitational/teleport-actions/auth@v1
+    uses: gravitational/teleport-actions/auth@main
     with:
       # Specify the publically accessible address of your Teleport proxy.
       proxy: tele.example.com:443
