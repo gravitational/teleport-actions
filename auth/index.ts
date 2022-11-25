@@ -23,6 +23,7 @@ async function run() {
   const identityFilePath = path.join(destinationPath, 'identity');
   core.setOutput('identity-file', identityFilePath);
   core.exportVariable('TELEPORT_PROXY', sharedInputs.proxy);
+  core.exportVariable('TELEPORT_AUTH_SERVER', sharedInputs.proxy);
   core.exportVariable('TELEPORT_IDENTITY_FILE', identityFilePath);
 }
 run().catch(core.setFailed);
