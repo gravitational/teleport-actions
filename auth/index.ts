@@ -6,6 +6,9 @@ import * as tbot from '../lib/tbot';
 import * as io from '../lib/io';
 
 async function run() {
+  core.warning(
+    'This action has moved from https://github.com/gravitational/teleport-actions to httsp://github.com/teleport-actions/auth . Please update your workflow!'
+  );
   const sharedInputs = tbot.getSharedInputs();
   const config = tbot.baseConfigurationFromSharedInputs(sharedInputs);
 

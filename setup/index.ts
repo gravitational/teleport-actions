@@ -71,6 +71,10 @@ function getInputs(): Inputs {
 const toolName = 'teleport';
 
 async function run(): Promise<void> {
+  core.warning(
+    'This action has moved from https://github.com/gravitational/teleport-actions to https://github.com/teleport-actions/setup . Please update your workflow!'
+  );
+
   const inputs = getInputs();
   const version = versionString(os.platform(), os.arch(), inputs.version);
   core.info(`Installing Teleport ${version}`);
