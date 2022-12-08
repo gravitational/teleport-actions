@@ -4002,6 +4002,7 @@ const tbot = __importStar(__nccwpck_require__(2229));
 const io = __importStar(__nccwpck_require__(9317));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
+        core.warning('This action has moved from https://github.com/gravitational/teleport-actions to httsp://github.com/teleport-actions/auth . Please update your workflow!');
         const sharedInputs = tbot.getSharedInputs();
         const config = tbot.baseConfigurationFromSharedInputs(sharedInputs);
         const destinationPath = yield io.makeTempDirectory();
